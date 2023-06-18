@@ -11,15 +11,15 @@ const app = express()
         
 
 app.get('/', (req,res)=>{
-    const url = 'https://www.poisonapple.co.kr/'
+    const url = ''
 
     axios(url).then(response => {
         const html = response.data
         const $ = cheerio.load(html)
         const articles=[]
-        $('#content > div > div:nth-child(4) > div > div > div > div > ul', html)
+        $('', html)
         .each(function(){
-            const title = $('div.txt').text()
+            const title = $('').text()
             articles.push({
                 title,
             })
