@@ -18,8 +18,11 @@
  */
 
 document.getElementById("myButton").onclick = function() {
+    //오픈 마감 마감2
     Part = document.getElementById('type').value;
+    //영화시간
     Time = document.getElementById('time').value;
+    //근무시간
     Type = document.getElementById('time_part').value;
     
     //23:10
@@ -50,60 +53,103 @@ document.getElementById("myButton").onclick = function() {
             start_hour = hour;
             start_min = minu - 30;
         }
+
         end_hour = start_hour + Type_hour;
-        end_min = start_min + Type_minu;
+        end_min = start_min + Type_minu+30;
+        console.log(end_min);
+        
+
         if (start_min < 0) {
             start_min = Math.abs(start_min);
         } 
         if (start_min == 0) {
             document.getElementById('myLabel').innerHTML = "출근시간 : " + start_hour + "시" + "00분";
+            document.getElementById('String').innerHTML = '퇴근시간 : ' + end_hour + "시" + end_min + "분"; 
         }
         else {
             document.getElementById('myLabel').innerHTML = "출근시간 : " + start_hour + "시" + start_min + "분";
+            document.getElementById('String').innerHTML = '퇴근시간 : ' + end_hour + "시" + end_min + "분"; 
         }
 
         
         
-    } else if (Part == '마감') {
+    } else if (Part == '마감1') {
         //본영화시간 먼저 계산
         if (minu > 60) {
             hour += 1;
             minu -= 60;
         } else {
             minu = minu + 10;
-            if (minu == 60) {
+            if (minu >= 60) {
                 hour += 1;
                 minu = minu - 60;
             }
         }
         console.log("영화 시작 시간 : " + hour + "시" + minu + "분")
+        
+/*         end_hour = start_hour + Type_hour;
+        end_min = start_min + Type_minu+30;
+        */
 
         if (minu < 30) {
-            start_min = minu + 30;
-            start_hour = hour - Type_hour -1;
+            minu += 30;
+            start_hour = hour - Type_hour - 1;
+            start_min = minu - Type_minu;
+            
+
+            end_hour = start_hour + Type_hour;
+            end_min = start_min+ Type_minu;
 
             if (start_min == 0) {
                 document.getElementById('myLabel').innerHTML = "출근시간 : " + start_hour + "시" + "00분";
+                document.getElementById('String').innerHTML = '퇴근시간 : ' + end_hour + "시" + end_min + "분"; 
             } else {
                 document.getElementById('myLabel').innerHTML = "출근 시간 : " + start_hour + "시" + start_min + "분";
+                document.getElementById('String').innerHTML = '퇴근시간 : ' + end_hour + "시" + end_min + "분"; 
             }
         } else {
             start_min = minu - Type_minu;
             start_hour = hour - Type_hour;
 
+            end_hour = start_hour + Type_hour;
+            end_min = start_min+ Type_minu;
+
             if (start_min == 0) {
                 document.getElementById('myLabel').innerHTML = "출근시간 : " + start_hour + "시" + "00분";
+                document.getElementById('String').innerHTML = '퇴근시간 : ' + end_hour + "시" + end_min + "분"; 
             } else {
-                document.getElementById('myLabel').innerHTML = "출근 시간 : " +start_hour + "시" + start_min + "분";
+                document.getElementById('myLabel').innerHTML = "출근 시간 : " + start_hour + "시" + start_min + "분";
+                document.getElementById('String').innerHTML = '퇴근시간 : ' + end_hour + "시" + end_min + "분"; 
             }
             
         }
         
         
     } else if (Part == '마감2') {
-        start_hour = hour - Type_hour;
-        start_min = minu;
-        document.getElementById('myLabel').innerHTML = "출근 시간 : " +start_hour + "시" + start_min + "분";
+        console.log(Type_hour);
+        console.log(Type_minu);
+
+        if (minu <= 0) {
+            start_hour = hour - Type_hour - 1;
+            start_min = minu - Type_minu;
+        } else {
+            start_hour = hour - Type_hour;
+            start_min = minu - Type_minu-60;
+        }
+
+        start_min = Math.abs(start_min);
+
+        document.getElementById('myLabel').innerHTML = "출근 시간 : " + start_hour + "시" + start_min + "분";
+
+        end_hour = start_hour + Type_hour; 
+        end_min = start_min + Type_minu + 30;
+        
+        if (end_min >= 60) {
+            end_hour += 1;
+            end_min = end_min - 60;
+        }
+        
+        document.getElementById('String').innerHTML = '퇴근시간 : ' + end_hour + "시" + end_min + "분"; 
     }
 
 
