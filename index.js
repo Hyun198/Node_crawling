@@ -128,17 +128,20 @@ function getSelectedValue () {
         
     } else if (Part == 'close2') {
         console.log('마감2');
-        console.log(movie_hour-Work_hour);
+        console.log(movie_hour - Work_hour);
+        console.log(movie_min - Work_minu);
         //hour, minu 는 입력받은 영화 시간
 
-
-        if (movie_min < 30) {
-            start_hour = movie_hour - Work_hour -1;
+        if (Work_minu != 0) {
+            start_hour = movie_hour - Work_hour;
             start_min = movie_min - Work_minu;
-            start_min = Math.abs(start_min);
+            if (start_min < 0) {
+                start_hour = movie_hour - Work_hour -1;
+                start_min = Math.abs(start_min);
+            }
         } else {
             start_hour = movie_hour - Work_hour;
-            start_min = movie_min + Work_minu;
+            start_min = Work_minu;
         }
 
         end_hour = start_hour + Work_hour; 
