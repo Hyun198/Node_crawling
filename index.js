@@ -3,7 +3,7 @@ const app = express();
 const axios = require('axios');
 const cheerio = require('cheerio');
 
-const url = 'http://www.cgv.co.kr/theaters/?areacode=02&theaterCode=0298&date=20230816';
+const url = '';
 
 axios(url).then(response => {
     const html = response.data;
