@@ -3,22 +3,36 @@ const app = express();
 const axios = require('axios');
 const cheerio = require('cheerio');
 
-const url = '';
+const url = 'http://www.cgv.co.kr/theaters/?areacode=02&theaterCode=0298&date=20230816';
 
 axios(url).then(response => {
     const html = response.data;
     const $ = cheerio.load(html);
-    const $productList = $(".space");
-    let products = []
-    $productList.each((idx, node) => {
-        products.push({
-            title: $(node).find('.txt').text(),
-            img: $(node).find('.thumbnail > a > img').attr('src')
-        })
+    const $time = $("div.info-timetable > ul > li > a");
+
+    let times = []
+    $time.each((idx, node) => {
+        const href = $(node).attr('href');
+        const playStartTime = $(node).attr('data-playstarttime');
         
+        times.push({
+            href: href,
+            playStartTime: playStartTime
+        })
+    })
+    console.log(times);
+
+  /*   let times = []
+    $time.each((idx, node) => {
+        times.push({
+            screen: $(node).find('a').attr('data-screenkorname').text(),
+            time: $(node).find('a').attr('data-playstarttime').text()
+           
+        })
     });
-    console.log(products);
-})
+    console.log(times); */
+ 
+});
 
 
 
