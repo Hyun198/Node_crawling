@@ -6,23 +6,24 @@ require('dotenv').config()
 async function start() {
     const browser = await puppeteer.launch({headless:true})
     const page = await browser.newPage()
-    await page.goto(process.env)
+    await page.goto(process.env.url)
 
     const names = await page.evaluate(() =>{
         return Array.from(document.querySelectorAll(".txt strong")).map(x => x.textContent)
     })
-    await fs.writeFile("names.txt", names.join("\r\n"))
+    await fs.writeFile(path.join('name','names.txt'),names.join("\r\n"))
 
 
 
-    const photos = await page.$$eval(".goods-content1 img", (imgs)=> {
+    const photos = await page.$$eval(".goods-content1 img:not(.hot img)", (imgs)=> {
         return imgs.map(x => x.src)
     })
     
     for (const photo of photos) {
         const imagePage = await page.goto(photo)
+        const imageName = path.basename(photo);
         
-        await fs.writeFile(photo.split("/").pop(), await imagePage.buffer())
+        await fs.writeFile(path.join('img',imageName), await imagePage.buffer())
     } 
     
     await browser.close()
