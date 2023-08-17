@@ -8,10 +8,19 @@ async function start() {
     const page = await browser.newPage()
     await page.goto(process.env.cgv)
 
-    const names = await page.evaluate(() =>{
-        return Array.from(document.querySelectorAll(".time_info a")).map(x => x.textContent)
+    const times = await page.evaluate(() =>{
+        return Array.from(document.querySelectorAll(".movie_content._wrap_time_table  span.time_info a")).map(x => x.textContent)
     })
-    await fs.writeFile(path.join('name','names.txt'),names.join("\r\n"))
+    await fs.writeFile(path.join('name','times.txt'),times.join("\r\n"))
+
+    const movies = await page.evaluate(()=>{
+        return  Array.from(document.querySelectorAll(".movie_content._wrap_time_table th a")).map(x => x.textContent)
+    })
+    
+    await fs.writeFile(path.join('name','movies.txt'),movies.join("\r\n"))
+
+    const total = movies.map((movie, index) => `${movie}: ${times[index]}`);
+    await fs.writeFile(path.join('name', 'total.txt'), total.join("\r\n"));
 
 
 /* 
