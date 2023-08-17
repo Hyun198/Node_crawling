@@ -1,34 +1,32 @@
-const PORT = 8000
+const puppeteer = require('puppeteer')
+const fs = require('fs/promises')
+const path = require('path')
+require('dotenv').config()
 
-const axios = require('axios')
-const cheerio = require('cheerio')
-const express = require('express')
-const iconv = require('iconv-lite')
+async function start() {
+    const browser = await puppeteer.launch({headless:true})
+    const page = await browser.newPage()
+    await page.goto(process.env)
 
-const app = express()
-
-
-        
-
-app.get('/', (req,res)=>{
-    const url = ''
-
-    axios(url).then(response => {
-        const html = response.data
-        const $ = cheerio.load(html)
-        const articles=[]
-        $('', html)
-        .each(function(){
-            const title = $('').text()
-            articles.push({
-                title,
-            })
-        })
-        res.send(articles)
-    
-    }).catch(err => {
-        console.error(err)
+    const names = await page.evaluate(() =>{
+        return Array.from(document.querySelectorAll(".txt strong")).map(x => x.textContent)
     })
-})
+    await fs.writeFile("names.txt", names.join("\r\n"))
+
+
+
+    const photos = await page.$$eval(".goods-content1 img", (imgs)=> {
+        return imgs.map(x => x.src)
+    })
     
-app.listen(PORT, () => console.log(`server is running on ${PORT}`))
+    for (const photo of photos) {
+        const imagePage = await page.goto(photo)
+        
+        await fs.writeFile(photo.split("/").pop(), await imagePage.buffer())
+    } 
+    
+    await browser.close()
+
+}
+
+start()
